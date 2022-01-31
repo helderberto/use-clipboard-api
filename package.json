@@ -1,0 +1,28 @@
+{
+  "name": "use-clipboard",
+  "version": "0.1.0",
+  "description": "useClipboard is a React Hook that consumes Web Clipboard API.",
+  "author": "Helder B. Berto <helder.burato@gmail.com>",
+  "main": "dist/index.js",
+  "types": "dist/types/index.d.ts",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [
+    "react",
+    "react-hook",
+    "hooks",
+    "hook",
+    "clipboard",
+    "web-api"
+  ],
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/helderburato/use-clipboard"
+  },
+  "bugs": {
+    "url": "https://github.com/helderburato/use-clipboard/issues"
+  },
+  "homepage": "https://github.com/helderburato/use-clipboard#readme"
+}
