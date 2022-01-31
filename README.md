@@ -1,7 +1,7 @@
 <div align="center">
   <h1>📋 use-clipboard-api</h1>
 
-  <p><strong>use-clipboard-api is a React Hook</strong> that consumes Web Clipboard API.</p>
+  <p><strong>useClipboardApi() is a React Hook</strong> that consumes Web Clipboard API.</p>
 
 <!-- prettier-ignore-start -->
 [![version][version-badge]][package]
