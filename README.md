@@ -1,7 +1,7 @@
 <div align="center">
-  <h1>📋 use-clipboard</h1>
+  <h1>📋 use-clipboard-api</h1>
 
-  <p><strong>📋use-clipboard is a React Hook</strong> that consumes Web Clipboard API.</p>
+  <p><strong>📋use-clipboard-api is a React Hook</strong> that consumes Web Clipboard API.</p>
 
 <!-- prettier-ignore-start -->
 [![build][build-badge]][build]
@@ -33,18 +33,18 @@
 
 ## Usage
 
-To start using the `use-clipboard` in your project, first install in your project:
+To start using the `use-clipboard-api` in your project, first install in your project:
 
-`yarn add use-clipboard` or `npm install use-clipboard`
+`yarn add use-clipboard-api` or `npm install use-clipboard-api`
 
 <details open>
 <summary><strong>Copy to clipboard with useClipboard:</strong></summary>
 
 ```jsx
-import useClipboard from 'use-clipboard';
+import useClipboard from 'use-clipboard-api';
 
 function App() {
-  const [value, copy] = useClipboard();
+  const [value, copy] = useClipboardApi();
 
   return <button onClick={() => copy('Text to be copied.')}>Copy me!</button>;
 }
@@ -60,19 +60,19 @@ Please read [CONTRIBUTING.md](CONTRIBUTING.md) for details on our code of conduc
 
 ## Bugs and Sugestions
 
-Report bugs or do suggestions using the [issues](https://github.com/helderburato/use-clipboard/issues).
+Report bugs or do suggestions using the [issues](https://github.com/helderburato/use-clipboard-api/issues).
 
 ## License
 
 [MIT License](LICENSE) © [helderburato](https://helderburato.com)
 
 <!-- prettier-ignore-start -->
-[version-badge]: https://img.shields.io/npm/v/use-clipboard.svg?style=flat-square
-[package]: https://www.npmjs.com/package/use-clipboard
-[downloads-badge]: https://img.shields.io/npm/dm/use-clipboard.svg?style=flat-square
-[npmtrends]: http://www.npmtrends.com/use-clipboard
-[license-badge]: https://img.shields.io/npm/l/use-clipboard.svg?style=flat-square
-[license]: https://github.com/helderburato/use-clipboard/blob/master/LICENSE
-[build]: https://github.com/helderburato/use-clipboard/actions
-[build-badge]: https://github.com/helderburato/use-clipboard/actions/workflows/ci.yml/badge.svg
+[version-badge]: https://img.shields.io/npm/v/use-clipboard-api.svg?style=flat-square
+[package]: https://www.npmjs.com/package/use-clipboard-api
+[downloads-badge]: https://img.shields.io/npm/dm/use-clipboard-api.svg?style=flat-square
+[npmtrends]: http://www.npmtrends.com/use-clipboard-api
+[license-badge]: https://img.shields.io/npm/l/use-clipboard-api.svg?style=flat-square
+[license]: https://github.com/helderburato/use-clipboard-api/blob/master/LICENSE
+[build]: https://github.com/helderburato/use-clipboard-api/actions
+[build-badge]: https://github.com/helderburato/use-clipboard-api/actions/workflows/ci.yml/badge.svg
 <!-- prettier-ignore-end -->

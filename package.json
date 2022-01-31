@@ -1,7 +1,7 @@
 {
-  "name": "use-clipboard",
+  "name": "use-clipboard-api",
   "version": "0.1.0",
-  "description": "📋useClipboard is a React Hook that consumes Web Clipboard API.",
+  "description": "📋useClipboardApi is a React Hook that consumes Web Clipboard API.",
   "author": "Helder B. Berto <helder.burato@gmail.com>",
   "main": "dist/index.js",
   "types": "dist/types/index.d.ts",
@@ -24,12 +24,12 @@
   "license": "MIT",
   "repository": {
     "type": "git",
-    "url": "https://github.com/helderburato/use-clipboard"
+    "url": "https://github.com/helderburato/use-clipboard-api"
   },
   "bugs": {
-    "url": "https://github.com/helderburato/use-clipboard/issues"
+    "url": "https://github.com/helderburato/use-clipboard-api/issues"
   },
-  "homepage": "https://github.com/helderburato/use-clipboard#readme",
+  "homepage": "https://github.com/helderburato/use-clipboard-api#readme",
   "peerDependencies": {
     "react": ">=16.0.0"
   },

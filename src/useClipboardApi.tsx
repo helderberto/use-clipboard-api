@@ -2,7 +2,7 @@ import { useState } from 'react';
 
 import type { CopiedValue, CopyFn } from './types';
 
-export default function useClipboard(): [CopiedValue, CopyFn] {
+export default function useClipboardApi(): [CopiedValue, CopyFn] {
   const [copiedValue, setCopiedValue] = useState<CopiedValue>(null);
 
   const copy: CopyFn = async (value) => {
