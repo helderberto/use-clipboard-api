@@ -1,7 +1,7 @@
 {
   "name": "use-clipboard",
   "version": "0.1.0",
-  "description": "useClipboard is a React Hook that consumes Web Clipboard API.",
+  "description": "📋useClipboard is a React Hook that consumes Web Clipboard API.",
   "author": "Helder B. Berto <helder.burato@gmail.com>",
   "main": "dist/index.js",
   "types": "dist/types/index.d.ts",
