@@ -41,5 +41,10 @@
     "prettier": "^2.5.1",
     "react": "^17.0.2",
     "typescript": "^4.5.5"
+  },
+  "commitlint": {
+    "extends": [
+      "@commitlint/config-conventional"
+    ]
   }
 }
