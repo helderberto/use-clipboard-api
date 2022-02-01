@@ -4,6 +4,7 @@
   <p><strong>useClipboardApi() is a React Hook</strong> that consumes Web Clipboard API.</p>
 
 <!-- prettier-ignore-start -->
+[![build][build-badge]][build]
 [![version][version-badge]][package]
 [![MIT License][license-badge]][license]
 [![downloads][downloads-badge]][npmtrends]
