@@ -41,7 +41,7 @@ To start using the `use-clipboard-api` in your project, first install in your pr
 <summary><strong>Copy to clipboard with useClipboard:</strong></summary>
 
 ```jsx
-import useClipboard from 'use-clipboard-api';
+import useClipboardApi from 'use-clipboard-api';
 
 function App() {
   const [value, copy] = useClipboardApi();
