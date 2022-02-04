@@ -38,7 +38,7 @@ To start using the `use-clipboard-api` in your project, first install in your pr
 `yarn add use-clipboard-api` or `npm install use-clipboard-api`
 
 <details open>
-<summary><strong>Copy to clipboard with useClipboard:</strong></summary>
+<summary><strong>Copy to clipboard:</strong></summary>
 
 ```jsx
 import useClipboardApi from 'use-clipboard-api';
