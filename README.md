@@ -46,7 +46,12 @@ import useClipboardApi from 'use-clipboard-api';
 function App() {
   const [value, copy] = useClipboardApi();
 
-  return <button onClick={() => copy('Text to be copied.')}>Copy me!</button>;
+  return (
+    <div>
+      <button onClick={() => copy('Text to be copied.')}>Copy me!</button>
+      <p>Copied value: {value}</p>
+    </div>
+  );
 }
 
 export default App;
