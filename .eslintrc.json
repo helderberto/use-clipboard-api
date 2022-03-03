@@ -20,7 +20,7 @@
   },
   "settings": {
     "react": {
-      "version": "latest"
+      "version": "detect"
     }
   },
   "plugins": ["react", "@typescript-eslint"],
