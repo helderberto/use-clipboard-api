@@ -1,31 +1,71 @@
-name: ci
+name: CI
+
 on:
-  pull_request:
   push:
     branches:
       - 'main'
+  pull_request: {}
 
 jobs:
-  check:
+  test:
+    name: Unit Tests
     runs-on: ubuntu-latest
-    strategy:
-      matrix:
-        node: [12, 14]
-    name: 'v${{ matrix.node }} lint, test and build'
-
+    timeout-minutes: 10
     steps:
       - name: Checkout repository
-        uses: actions/checkout@v2
+        uses: actions/checkout@v1
 
-      - name: Setup node
+      - name: Setup Node.js
         uses: actions/setup-node@v2
         with:
-          node-version: ${{ matrix.node }}
+          node-version: '14'
 
-      - name: Install dependencies
+      - name: Install dependencies & cache
         uses: bahmutov/npm-install@v1
         with:
-          useLockFile: false
+          useLockFile: true
 
-      - name: Run validate
-        run: npm run validate
+      - name: Run tests
+        run: npm run test:ci
+
+  lint:
+    name: Lint
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v1
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v2
+        with:
+          node-version: '14'
+
+      - name: Install dependencies & cache
+        uses: bahmutov/npm-install@v1
+        with:
+          useLockFile: true
+
+      - name: Run lint
+        run: npm run lint
+
+  build:
+    name: Build
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v1
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v2
+        with:
+          node-version: '14'
+
+      - name: Install dependencies & cache
+        uses: bahmutov/npm-install@v1
+        with:
+          useLockFile: true
+
+      - name: Run build
+        run: npm run build

@@ -6,14 +6,14 @@
   "main": "dist/index.js",
   "types": "dist/types/index.d.ts",
   "scripts": {
-    "lint": "eslint . --ext .js,.ts,.tsx",
+    "lint": "eslint . --ext .js,.ts,.tsx --max-warnings=0",
     "format": "prettier --write \"**/*.+(js|ts|tsx|json)\"",
-    "test": "jest",
+    "test": "jest --maxWorkers=50%",
+    "test:ci": "jest",
     "test:watch": "jest --watch --maxWorkers=50%",
     "build": "rm -rf ./dist && tsc",
     "prepare": "husky install",
-    "prepublishOnly": "yarn build",
-    "validate": "npm run lint && npm run test && npm run build"
+    "prepublishOnly": "yarn build"
   },
   "keywords": [
     "react",
