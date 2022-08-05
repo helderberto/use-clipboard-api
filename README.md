@@ -65,11 +65,11 @@ Please read [CONTRIBUTING.md](CONTRIBUTING.md) for details on our code of conduc
 
 ## Bugs and Sugestions
 
-Report bugs or do suggestions using the [issues](https://github.com/helderburato/use-clipboard-api/issues).
+Report bugs or do suggestions using the [issues](https://github.com/helderberto/use-clipboard-api/issues).
 
 ## License
 
-[MIT License](LICENSE) © [helderburato](https://helderburato.com)
+[MIT License](LICENSE) © [helderburato](https://helderberto.com)
 
 <!-- prettier-ignore-start -->
 [version-badge]: https://img.shields.io/npm/v/use-clipboard-api.svg?style=flat-square
@@ -77,7 +77,7 @@ Report bugs or do suggestions using the [issues](https://github.com/helderburato
 [downloads-badge]: https://img.shields.io/npm/dm/use-clipboard-api.svg?style=flat-square
 [npmtrends]: http://www.npmtrends.com/use-clipboard-api
 [license-badge]: https://img.shields.io/npm/l/use-clipboard-api.svg?style=flat-square
-[license]: https://github.com/helderburato/use-clipboard-api/blob/master/LICENSE
-[build]: https://github.com/helderburato/use-clipboard-api/actions
-[build-badge]: https://github.com/helderburato/use-clipboard-api/actions/workflows/ci.yml/badge.svg
+[license]: https://github.com/helderberto/use-clipboard-api/blob/master/LICENSE
+[build]: https://github.com/helderberto/use-clipboard-api/actions
+[build-badge]: https://github.com/helderberto/use-clipboard-api/actions/workflows/ci.yml/badge.svg
 <!-- prettier-ignore-end -->

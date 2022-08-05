@@ -26,12 +26,12 @@
   "license": "MIT",
   "repository": {
     "type": "git",
-    "url": "https://github.com/helderburato/use-clipboard-api"
+    "url": "https://github.com/helderberto/use-clipboard-api"
   },
   "bugs": {
-    "url": "https://github.com/helderburato/use-clipboard-api/issues"
+    "url": "https://github.com/helderberto/use-clipboard-api/issues"
   },
-  "homepage": "https://github.com/helderburato/use-clipboard-api#readme",
+  "homepage": "https://github.com/helderberto/use-clipboard-api#readme",
   "peerDependencies": {
     "react": ">=16.0.0"
   },
