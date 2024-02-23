@@ -13,7 +13,7 @@
     "test:watch": "jest --watch --maxWorkers=50%",
     "build": "rm -rf ./dist && tsc",
     "prepare": "husky install",
-    "prepublishOnly": "yarn build"
+    "prepublishOnly": "npm run build"
   },
   "keywords": [
     "react",
