@@ -37,7 +37,7 @@
   },
   "devDependencies": {
     "@commitlint/cli": "^17.0.0",
-    "@commitlint/config-conventional": "^17.0.0",
+    "@commitlint/config-conventional": "^19.2.2",
     "@swc/core": "^1.2.146",
     "@swc/jest": "^0.2.17",
     "@testing-library/react": "^13.0.0",
