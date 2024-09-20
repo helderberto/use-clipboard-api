@@ -38,13 +38,14 @@ To start using the `use-clipboard-api` in your project, first install in your pr
 `yarn add use-clipboard-api` or `npm install use-clipboard-api`
 
 <details open>
-<summary><strong>Copy to clipboard:</strong></summary>
+<summary><strong>Copy to clipboard using a ref:</strong></summary>
 
-```jsx
+```tsx
+import React, { useRef } from 'react';
 import useClipboardApi from 'use-clipboard-api';
 
-const ClipboardExample = () => {
-  const inputRef = useRef(null);
+function ClipboardExampleWithRef() {
+  const inputRef = useRef<HTMLInputElement | null>(null);
   const [copiedValue, copy, error] = useClipboardApi();
 
   const handleCopy = async () => {
@@ -68,7 +69,46 @@ const ClipboardExample = () => {
       {error && <p style={{ color: 'red' }}>Error: {error}</p>}
     </div>
   );
-};
+}
+```
+
+</details>
+
+<details>
+<summary><strong>Copy to clipboard without using a ref:</strong></summary>
+
+```tsx
+import React, { useState } from 'react';
+import useClipboardApi from 'use-clipboard-api';
+
+function ClipboardExampleWithoutRef() {
+  const [inputValue, setInputValue] = useState('');
+  const [copiedValue, copy, error] = useClipboardApi();
+
+  const handleCopy = async () => {
+    const success = await copy(inputValue);
+
+    if (success) {
+      console.log('Text copied:', copiedValue);
+    } else {
+      console.error('Copy failed:', error);
+    }
+  };
+
+  return (
+    <div>
+      <input
+        type="text"
+        value={inputValue}
+        onChange={(e) => setInputValue(e.target.value)}
+        placeholder="Type something to copy"
+      />
+      <button onClick={handleCopy}>Copy to Clipboard</button>
+      {copiedValue && <p>Copied: {copiedValue}</p>}
+      {error && <p style={{ color: 'red' }}>Error: {error}</p>}
+    </div>
+  );
+}
 ```
 
 </details>
