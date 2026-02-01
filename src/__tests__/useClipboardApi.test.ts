@@ -1,9 +1,9 @@
-import { waitFor, act } from '@testing-library/react';
-import { renderHook } from '@testing-library/react-hooks';
+import { waitFor, act, renderHook } from '@testing-library/react';
+import { vi } from 'vitest';
 import useClipboardApi from '../useClipboardApi';
 
 // Mock implementation for the clipboard API
-const mockWriteText = jest.fn();
+const mockWriteText = vi.fn();
 
 Object.assign(window.navigator, {
   clipboard: {
@@ -13,7 +13,7 @@ Object.assign(window.navigator, {
 
 describe('useClipboardApi', () => {
   beforeEach(() => {
-    jest.clearAllMocks();
+    vi.clearAllMocks();
   });
 
   it('should return initial state and copy function', () => {

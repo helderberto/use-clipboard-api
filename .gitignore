@@ -8,3 +8,4 @@ coverage
 settings.json
 *.code-workspace
 .eslintcache
+.claude/
