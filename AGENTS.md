@@ -18,6 +18,7 @@ React hook and provider for copying with the Clipboard API: `useClipboardApi`, `
 - `build.test.ts` runs tsup in the node environment (`// @vitest-environment node`)
 - Stub browser globals with `vi.stubGlobal`. Restore with `vi.unstubAllGlobals()` in `afterEach`
 - Coverage stays at 100%. Vitest thresholds enforce it
+- Named exports only. No `export *`, no `export default`
 - Minimum code. No speculative options or abstractions
 - No comments, except a short non-obvious "why"
 - `strict` TypeScript. Tests are type-checked too
