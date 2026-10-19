@@ -22,7 +22,8 @@ const isError = (err: unknown): err is Error =>
   err instanceof Error ||
   (typeof DOMException !== 'undefined' && err instanceof DOMException);
 
-const toError = (err: unknown) => (isError(err) ? err : new Error(String(err)));
+export const toError = (err: unknown) =>
+  isError(err) ? err : new Error(String(err));
 
 const toPlainText = (data: ClipboardData) => {
   const text = typeof data === 'string' ? data : data['text/plain'];
