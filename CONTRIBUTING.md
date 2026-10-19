@@ -41,4 +41,4 @@ You can delete your branch after the pull request is merged.
 
 ## Releases
 
-[semantic-release](https://github.com/semantic-release/semantic-release) publishes from `main`. It picks the version from commit types, so don't bump `version` by hand.
+[semantic-release](https://github.com/semantic-release/semantic-release) publishes from `main`. It sets the version and updates `CHANGELOG.md` from commit types, so don't edit either by hand.
