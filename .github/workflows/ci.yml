@@ -6,6 +6,9 @@ on:
       - 'main'
   pull_request: {}
 
+permissions:
+  contents: read
+
 jobs:
   test:
     name: Unit Tests
@@ -18,12 +21,11 @@ jobs:
       - name: Setup Node.js
         uses: actions/setup-node@v4
         with:
-          node-version: '20'
+          node-version: '22'
+          cache: 'npm'
 
-      - name: Install dependencies & cache
-        uses: bahmutov/npm-install@v1
-        with:
-          useLockFile: true
+      - name: Install dependencies
+        run: npm ci
 
       - name: Run tests
         run: npm run test:ci
@@ -39,12 +41,11 @@ jobs:
       - name: Setup Node.js
         uses: actions/setup-node@v4
         with:
-          node-version: '20'
+          node-version: '22'
+          cache: 'npm'
 
-      - name: Install dependencies & cache
-        uses: bahmutov/npm-install@v1
-        with:
-          useLockFile: true
+      - name: Install dependencies
+        run: npm ci
 
       - name: Run lint
         run: npm run lint
@@ -60,12 +61,11 @@ jobs:
       - name: Setup Node.js
         uses: actions/setup-node@v4
         with:
-          node-version: '20'
+          node-version: '22'
+          cache: 'npm'
 
-      - name: Install dependencies & cache
-        uses: bahmutov/npm-install@v1
-        with:
-          useLockFile: true
+      - name: Install dependencies
+        run: npm ci
 
       - name: Run build
         run: npm run build
