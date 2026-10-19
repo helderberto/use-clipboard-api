@@ -12,6 +12,7 @@ import type {
   ClipboardProviderProps,
   UseClipboardApiResult,
 } from './types';
+import { readElement } from './readElement';
 import { toError, useClipboardApi } from './useClipboardApi';
 
 const COPY_SELECTOR = '[data-copy], [data-copy-target]';
@@ -27,13 +28,10 @@ function readData(element: Element): ClipboardData {
   const target = selector && document.querySelector(selector);
   if (!target) throw new Error(`Copy target not found: ${selector}`);
 
-  if (element.getAttribute('data-copy-format') === 'html') {
-    return { 'text/html': target.innerHTML, 'text/plain': target.textContent };
-  }
-  return target instanceof HTMLInputElement ||
-    target instanceof HTMLTextAreaElement
-    ? target.value
-    : target.textContent;
+  return readElement(
+    target,
+    element.getAttribute('data-copy-format') === 'html',
+  );
 }
 
 export function ClipboardProvider({
