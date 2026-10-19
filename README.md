@@ -46,6 +46,16 @@ function CopyButton({ text }: { text: string }) {
 }
 ```
 
+## Which API to use
+
+| You want to                                 | Use                                                                                      |
+| ------------------------------------------- | ---------------------------------------------------------------------------------------- |
+| Copy a string on click                      | `copy('text')`                                                                           |
+| Turn any button into a copy button          | `<button {...getCopyProps('text')}>`                                                     |
+| Copy what an input or element shows         | `copyFrom(ref)`                                                                          |
+| Keep formatting, like markdown as HTML      | `copy({ 'text/html': html, 'text/plain': text })` or `copyFrom(ref, { format: 'html' })` |
+| Copy from markdown or CMS HTML, no handlers | `<ClipboardProvider>` + `data-copy` attributes                                           |
+
 ## API
 
 ### `useClipboardApi(options?)`
@@ -60,9 +70,25 @@ The hook is also the default export.
 | -------------- | ------------------------------------------- | ------------------------------------------------------------------------------------------------------------ |
 | `copiedValue`  | `string \| null`                            | Last copied text, or the `text/plain` entry of a record. `null` before a copy, after a failure or a timeout. |
 | `copy`         | `(data: ClipboardData) => Promise<boolean>` | Writes a string or a MIME record. Resolves `true` on success. Stable across renders.                         |
+| `copyFrom`     | `(ref, options?) => Promise<boolean>`       | Copies an element: `value` for inputs and textareas, else its text. `{ format: 'html' }` copies rich text.   |
 | `error`        | `Error \| null`                             | Last failure, as thrown by the browser (e.g. `NotAllowedError`).                                             |
 | `getCopyProps` | `(data: ClipboardData) => CopyProps`        | Props for a copy button: `type`, `onClick` and `data-copied` while `data` is the copied value.               |
 | `isSupported`  | `boolean`                                   | `false` on the server and in browsers without the Clipboard API.                                             |
+
+Pass a ref to `copyFrom` to copy what an element shows.
+
+```tsx
+const { copyFrom } = useClipboardApi();
+const codeRef = useRef<HTMLPreElement>(null);
+
+<>
+  <pre ref={codeRef}>npm i use-clipboard-api</pre>
+  <button onClick={() => copyFrom(codeRef)}>Copy</button>
+  <button onClick={() => copyFrom(codeRef, { format: 'html' })}>
+    Copy as rich text
+  </button>
+</>;
+```
 
 Spread `getCopyProps` on a button to skip the wiring. Style the copied state with `[data-copied]`.
 
@@ -97,7 +123,7 @@ import { ClipboardProvider } from 'use-clipboard-api';
 
 ### Types
 
-All types are exported: `ClipboardData`, `ClipboardEntry`, `ClipboardProviderProps`, `CopiedValue`, `CopyFn`, `CopyProps`, `GetCopyProps`, `UseClipboardApiOptions` and `UseClipboardApiResult`.
+All types are exported: `ClipboardData`, `ClipboardEntry`, `ClipboardProviderProps`, `CopiedValue`, `CopyFn`, `CopyFromFn`, `CopyFromOptions`, `CopyProps`, `GetCopyProps`, `UseClipboardApiOptions` and `UseClipboardApiResult`.
 
 ```ts
 import type { ClipboardData } from 'use-clipboard-api';
@@ -127,12 +153,12 @@ import { useClipboardApi } from 'use-clipboard-api';
 
 function CopyInput() {
   const inputRef = useRef<HTMLInputElement>(null);
-  const { copiedValue, copy, error } = useClipboardApi({ timeout: 2000 });
+  const { copiedValue, copyFrom, error } = useClipboardApi({ timeout: 2000 });
 
   return (
     <div>
       <input ref={inputRef} placeholder="Type something to copy" />
-      <button onClick={() => copy(inputRef.current?.value ?? '')}>Copy</button>
+      <button onClick={() => copyFrom(inputRef)}>Copy</button>
       {copiedValue && <p>Copied: {copiedValue}</p>}
       {error && <p role="alert">{error.message}</p>}
     </div>
