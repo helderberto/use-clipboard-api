@@ -1,5 +1,21 @@
 # Changelog
 
+## [2.0.0](https://github.com/helderberto/use-clipboard-api/compare/v1.5.1...v2.0.0) (2026-10-19)
+
+### ⚠ BREAKING CHANGES
+
+* import the hook by name: import { useClipboardApi }.
+
+Co-Authored-By: Claude Opus 5.5 <noreply@anthropic.com>
+
+### Features
+
+* remove the default export ([d716cd9](https://github.com/helderberto/use-clipboard-api/commit/d716cd90ac9efd15836ad094d8ad4c826cb607ee))
+
+### Documentation
+
+* add v1 to v2 migration ([5b1629a](https://github.com/helderberto/use-clipboard-api/commit/5b1629aa7f216891a35848082d5170aea61f0ec3))
+
 ## [1.5.1](https://github.com/helderberto/use-clipboard-api/compare/v1.5.0...v1.5.1) (2026-10-19)
 
 ### Code Refactoring
