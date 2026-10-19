@@ -1,5 +1,15 @@
 # Changelog
 
+## [1.5.0](https://github.com/helderberto/use-clipboard-api/compare/v1.4.1...v1.5.0) (2026-10-19)
+
+### Features
+
+* add Copy component with asChild ([1205e52](https://github.com/helderberto/use-clipboard-api/commit/1205e52e30bd52fddf16f451c3cb07b0244b4358)), closes [#862](https://github.com/helderberto/use-clipboard-api/issues/862)
+
+### Documentation
+
+* document Copy component ([27081e4](https://github.com/helderberto/use-clipboard-api/commit/27081e469a1d3b2f62aa37c3585dde95b768a5f2))
+
 ## [1.4.1](https://github.com/helderberto/use-clipboard-api/compare/v1.4.0...v1.4.1) (2026-10-19)
 
 ### Documentation
