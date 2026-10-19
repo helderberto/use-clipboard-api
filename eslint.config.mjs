@@ -27,6 +27,9 @@ export default defineConfig([
       eslintReact.configs['recommended-typescript'],
       reactHooks.configs.flat.recommended,
     ],
+    settings: {
+      'react-x': { version: '18.0.0' },
+    },
   },
   {
     files: ['src/**/__tests__/**/*.{ts,tsx}'],
