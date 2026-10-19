@@ -1,6 +1,10 @@
 export type CopiedValue = string | null;
 
-export type CopyFn = (text: string) => Promise<boolean>;
+export type ClipboardEntry = string | Blob | Promise<string | Blob>;
+
+export type ClipboardData = string | Record<string, ClipboardEntry>;
+
+export type CopyFn = (data: ClipboardData) => Promise<boolean>;
 
 export interface UseClipboardApiOptions {
   timeout?: number;

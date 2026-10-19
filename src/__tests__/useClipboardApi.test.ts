@@ -4,6 +4,11 @@ import { renderToString } from 'react-dom/server';
 import useClipboardApiDefault, { useClipboardApi } from '..';
 
 const writeText = vi.fn<(text: string) => Promise<void>>();
+const write = vi.fn<(items: ClipboardItem[]) => Promise<void>>();
+
+class FakeClipboardItem {
+  constructor(readonly items: Record<string, unknown>) {}
+}
 
 function deferred() {
   let resolve!: () => void;
@@ -17,7 +22,8 @@ function deferred() {
 
 beforeEach(() => {
   writeText.mockReset().mockResolvedValue(undefined);
-  vi.stubGlobal('navigator', { clipboard: { writeText } });
+  write.mockReset().mockResolvedValue(undefined);
+  vi.stubGlobal('navigator', { clipboard: { writeText, write } });
 });
 
 afterEach(() => {
@@ -268,5 +274,89 @@ describe('useClipboardApi', () => {
 
     expect(result.current.error).toBeNull();
     expect(result.current.copiedValue).toBe('second');
+  });
+
+  describe('rich content', () => {
+    beforeEach(() => {
+      vi.stubGlobal('ClipboardItem', FakeClipboardItem);
+    });
+
+    it('writes a MIME record as a ClipboardItem', async () => {
+      const record = { 'text/html': '<b>hi</b>', 'text/plain': '**hi**' };
+      const { result } = renderHook(() => useClipboardApi());
+
+      let success: boolean | undefined;
+      await act(async () => {
+        success = await result.current.copy(record);
+      });
+
+      expect(success).toBe(true);
+      expect(write).toHaveBeenCalledWith([new FakeClipboardItem(record)]);
+      expect(writeText).not.toHaveBeenCalled();
+      expect(result.current.copiedValue).toBe('**hi**');
+      expect(result.current.error).toBeNull();
+    });
+
+    it('passes Promise entries to the ClipboardItem', async () => {
+      const html = Promise.resolve('<b>hi</b>');
+      const { result } = renderHook(() => useClipboardApi());
+
+      await act(async () => {
+        await result.current.copy({ 'text/html': html });
+      });
+
+      expect(write).toHaveBeenCalledWith([
+        new FakeClipboardItem({ 'text/html': html }),
+      ]);
+    });
+
+    it('sets copiedValue to null without a string text/plain entry', async () => {
+      const { result } = renderHook(() => useClipboardApi());
+
+      await act(async () => {
+        await result.current.copy({
+          'text/plain': new Blob(['hi'], { type: 'text/plain' }),
+        });
+      });
+
+      expect(write).toHaveBeenCalled();
+      expect(result.current.copiedValue).toBeNull();
+      expect(result.current.error).toBeNull();
+    });
+
+    it('falls back to text/plain when ClipboardItem is missing', async () => {
+      vi.stubGlobal('ClipboardItem', undefined);
+      const { result } = renderHook(() => useClipboardApi());
+
+      let success: boolean | undefined;
+      await act(async () => {
+        success = await result.current.copy({
+          'text/html': '<b>hi</b>',
+          'text/plain': '**hi**',
+        });
+      });
+
+      expect(success).toBe(true);
+      expect(write).not.toHaveBeenCalled();
+      expect(writeText).toHaveBeenCalledWith('**hi**');
+      expect(result.current.copiedValue).toBe('**hi**');
+    });
+
+    it('fails without ClipboardItem and a string text/plain entry', async () => {
+      vi.stubGlobal('ClipboardItem', undefined);
+      const { result } = renderHook(() => useClipboardApi());
+
+      let success: boolean | undefined;
+      await act(async () => {
+        success = await result.current.copy({ 'text/html': '<b>hi</b>' });
+      });
+
+      expect(success).toBe(false);
+      expect(writeText).not.toHaveBeenCalled();
+      expect(result.current.copiedValue).toBeNull();
+      expect(result.current.error).toEqual(
+        new Error('Rich clipboard not supported.'),
+      );
+    });
   });
 });

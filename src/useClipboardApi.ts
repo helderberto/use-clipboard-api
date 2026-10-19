@@ -6,6 +6,7 @@ import {
   useSyncExternalStore,
 } from 'react';
 import type {
+  ClipboardData,
   CopiedValue,
   CopyFn,
   UseClipboardApiOptions,
@@ -22,6 +23,11 @@ const isError = (err: unknown): err is Error =>
   (typeof DOMException !== 'undefined' && err instanceof DOMException);
 
 const toError = (err: unknown) => (isError(err) ? err : new Error(String(err)));
+
+const toPlainText = (data: ClipboardData) => {
+  const text = typeof data === 'string' ? data : data['text/plain'];
+  return typeof text === 'string' ? text : null;
+};
 
 export function useClipboardApi({
   timeout,
@@ -46,7 +52,7 @@ export function useClipboardApi({
   }, []);
 
   const copy: CopyFn = useCallback(
-    async (text) => {
+    async (data) => {
       const copyId = ++latestCopyRef.current;
       const isLatest = () =>
         isMountedRef.current && copyId === latestCopyRef.current;
@@ -56,7 +62,14 @@ export function useClipboardApi({
         if (!isClipboardSupported()) {
           throw new Error('Clipboard not supported.');
         }
-        await navigator.clipboard.writeText(text);
+        const text = toPlainText(data);
+        if (typeof data !== 'string' && typeof ClipboardItem !== 'undefined') {
+          await navigator.clipboard.write([new ClipboardItem(data)]);
+        } else if (text !== null) {
+          await navigator.clipboard.writeText(text);
+        } else {
+          throw new Error('Rich clipboard not supported.');
+        }
         if (isLatest()) {
           setCopiedValue(text);
           setError(null);
