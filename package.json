@@ -1,7 +1,7 @@
 {
   "name": "use-clipboard-api",
   "version": "1.2.1",
-  "description": "📋useClipboardApi is a React Hook that consumes Web Clipboard API.",
+  "description": "React hook and provider for copying text and rich content with the Clipboard API.",
   "author": "Helder B. Berto <helder.burato@gmail.com>",
   "type": "commonjs",
   "main": "./dist/index.js",
