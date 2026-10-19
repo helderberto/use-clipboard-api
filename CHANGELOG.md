@@ -1,5 +1,12 @@
 # Changelog
 
+# [1.3.0](https://github.com/helderberto/use-clipboard-api/compare/v1.2.2...v1.3.0) (2026-10-19)
+
+
+### Features
+
+* add getCopyProps prop getter ([7bb0d73](https://github.com/helderberto/use-clipboard-api/commit/7bb0d73d9f3a295877de4cbc063629bc134dd912)), closes [#857](https://github.com/helderberto/use-clipboard-api/issues/857)
+
 ## [1.2.2](https://github.com/helderberto/use-clipboard-api/compare/v1.2.1...v1.2.2) (2026-10-19)
 
 ## [1.2.1](https://github.com/helderberto/use-clipboard-api/compare/v1.2.0...v1.2.1) (2026-10-19)
