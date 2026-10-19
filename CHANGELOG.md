@@ -1,5 +1,11 @@
 # Changelog
 
+## [1.5.1](https://github.com/helderberto/use-clipboard-api/compare/v1.5.0...v1.5.1) (2026-10-19)
+
+### Code Refactoring
+
+* replace export * with named exports ([e0b3962](https://github.com/helderberto/use-clipboard-api/commit/e0b3962a4e1d5f86b4321de03458f735d92435ec))
+
 ## [1.5.0](https://github.com/helderberto/use-clipboard-api/compare/v1.4.1...v1.5.0) (2026-10-19)
 
 ### Features
