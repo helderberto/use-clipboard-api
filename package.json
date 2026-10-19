@@ -12,7 +12,7 @@
     "test:ci": "vitest run --coverage",
     "test:watch": "vitest",
     "build": "rm -rf ./dist && tsc",
-    "prepare": "husky install",
+    "prepare": "husky",
     "prepublishOnly": "npm run build"
   },
   "keywords": [
