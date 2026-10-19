@@ -52,6 +52,7 @@ function CopyButton({ text }: { text: string }) {
 | ------------------------------------------- | ---------------------------------------------------------------------------------------- |
 | Copy a string on click                      | `copy('text')`                                                                           |
 | Turn any button into a copy button          | `<button {...getCopyProps('text')}>`                                                     |
+| Use a component instead of a hook           | `<Copy data="text">Copy</Copy>`                                                          |
 | Copy what an input or element shows         | `copyFrom(ref)`                                                                          |
 | Keep formatting, like markdown as HTML      | `copy({ 'text/html': html, 'text/plain': text })` or `copyFrom(ref, { format: 'html' })` |
 | Copy from markdown or CMS HTML, no handlers | `<ClipboardProvider>` + `data-copy` attributes                                           |
@@ -98,6 +99,35 @@ const { getCopyProps } = useClipboardApi({ timeout: 2000 });
 <button {...getCopyProps('npm i use-clipboard-api')}>Copy</button>;
 ```
 
+### `<Copy>`
+
+A copy button as a component. Pass a function as children to change the label after a copy.
+
+```tsx
+import { Copy } from 'use-clipboard-api';
+
+<Copy data="npm i use-clipboard-api" timeout={2000}>
+  {({ copied }) => (copied ? 'Copied!' : 'Copy')}
+</Copy>;
+```
+
+Add `asChild` to put the copy behavior on your own element instead of a `<button>`.
+
+```tsx
+<Copy data="npm i use-clipboard-api" asChild>
+  <MyButton>Copy</MyButton>
+</Copy>
+```
+
+| Prop       | Type                                     | Description                                               |
+| ---------- | ---------------------------------------- | --------------------------------------------------------- |
+| `data`     | `ClipboardData`                          | Text or MIME record to copy.                              |
+| `timeout`  | `number`                                 | Same as `useClipboardApi`.                                |
+| `asChild`  | `boolean`                                | Renders the single child element instead of a `<button>`. |
+| `children` | `ReactNode \| ({ copied }) => ReactNode` | The label, or a function of the copied state.             |
+
+Other props go to the `<button>`. With `asChild`, they merge into the child, and the child's own props win.
+
 ### `<ClipboardProvider>`
 
 Copies from markup with `data-*` attributes, no handlers needed. It works with HTML React does not render, like markdown or CMS content.
@@ -123,7 +153,11 @@ import { ClipboardProvider } from 'use-clipboard-api';
 
 ### Types
 
-All types are exported: `ClipboardData`, `ClipboardEntry`, `ClipboardProviderProps`, `CopiedValue`, `CopyFn`, `CopyFromFn`, `CopyFromOptions`, `CopyProps`, `GetCopyProps`, `UseClipboardApiOptions` and `UseClipboardApiResult`.
+All types are exported:
+
+- Data: `ClipboardData`, `ClipboardEntry`, `CopiedValue`
+- Hook: `UseClipboardApiOptions`, `UseClipboardApiResult`, `CopyFn`, `CopyFromFn`, `CopyFromOptions`, `GetCopyProps`, `CopyProps`
+- Components: `ClipboardProviderProps`, `CopyComponentProps`, `CopyState`
 
 ```ts
 import type { ClipboardData } from 'use-clipboard-api';
