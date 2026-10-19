@@ -9,6 +9,7 @@ import type {
   ClipboardData,
   CopiedValue,
   CopyFn,
+  GetCopyProps,
   UseClipboardApiOptions,
   UseClipboardApiResult,
 } from './types';
@@ -90,7 +91,21 @@ export function useClipboardApi({
     [timeout],
   );
 
-  return { copiedValue, copy, error, isSupported };
+  const getCopyProps: GetCopyProps = useCallback(
+    (data) => {
+      const text = toPlainText(data);
+      return {
+        type: 'button',
+        onClick: () => {
+          void copy(data);
+        },
+        ...(text !== null && text === copiedValue ? { 'data-copied': '' } : {}),
+      };
+    },
+    [copy, copiedValue],
+  );
+
+  return { copiedValue, copy, error, getCopyProps, isSupported };
 }
 
 export default useClipboardApi;
