@@ -1,5 +1,12 @@
 # Changelog
 
+# [1.1.0](https://github.com/helderberto/use-clipboard-api/compare/v1.0.0...v1.1.0) (2026-10-19)
+
+
+### Features
+
+* copy rich content via ClipboardItem ([c078a4f](https://github.com/helderberto/use-clipboard-api/commit/c078a4fd490a6f0bb9baae21564ea08c98bb1225)), closes [#848](https://github.com/helderberto/use-clipboard-api/issues/848)
+
 ## [1.0.0] - 2026-10-19
 
 ### Breaking
