@@ -33,7 +33,7 @@ React hook and provider for copying with the Clipboard API: `useClipboardApi`, `
 
 - Exact pins only. `.npmrc` sets `save-exact` and `save-prefix=""`. Never hand-write `^` or `~`
 - Run `npm audit fix` after bumps
-- Blocked: TypeScript 7 (typescript-eslint needs <6.1). jsdom 30 and lint-staged 17 (need Node 22.22+). tsdown (npm 10 arborist crash)
+- Blocked: TypeScript 7 (typescript-eslint needs <6.1). jsdom 30 and lint-staged 17 (need Node 22.22+). tsdown (npm 10 arborist crash). `conventional-changelog-conventionalcommits` 10 (needs writer 9, semantic-release ships 8)
 - Node 22.12+ locally and in CI
 
 ## Verify
