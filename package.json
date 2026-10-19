@@ -1,6 +1,6 @@
 {
   "name": "use-clipboard-api",
-  "version": "2.0.0",
+  "version": "2.0.1",
   "description": "React hook and provider for copying text and rich content with the Clipboard API.",
   "author": "Helder B. Berto <helder.burato@gmail.com>",
   "type": "commonjs",

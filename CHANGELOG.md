@@ -1,5 +1,15 @@
 # Changelog
 
+## [2.0.1](https://github.com/helderberto/use-clipboard-api/compare/v2.0.0...v2.0.1) (2026-10-19)
+
+### Documentation
+
+* mark breaking changes with feat! only ([393bcf7](https://github.com/helderberto/use-clipboard-api/commit/393bcf772881e2b877002381a2484d817faf4dca))
+
+### Build System
+
+* read breaking changes from the commit subject ([4149860](https://github.com/helderberto/use-clipboard-api/commit/4149860006046d50b2d71ceb0bf762b184cc27e4))
+
 ## [2.0.0](https://github.com/helderberto/use-clipboard-api/compare/v1.5.1...v2.0.0) (2026-10-19)
 
 ### ⚠ BREAKING CHANGES
