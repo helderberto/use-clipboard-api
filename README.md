@@ -1,7 +1,7 @@
 <div align="center">
   <h1>use-clipboard-api</h1>
 
-  <p><strong>React hook for copying text with the Clipboard API.</strong></p>
+  <p><strong>React hook and provider for copying text and rich content with the Clipboard API.</strong></p>
 
 <!-- prettier-ignore-start -->
 [![build][build-badge]][build]
@@ -56,12 +56,12 @@ The hook is also the default export.
 | --------- | -------- | ----------------------------------------------------------------------------- |
 | `timeout` | `number` | Milliseconds until `copiedValue` resets to `null`. Omit it to keep the value. |
 
-| Returns       | Type                                        | Description                                                                          |
-| ------------- | ------------------------------------------- | ------------------------------------------------------------------------------------ |
-| `copiedValue` | `string \| null`                            | Last copied text. `null` before a copy, after a failure or a timeout.                |
-| `copy`        | `(data: ClipboardData) => Promise<boolean>` | Writes a string or a MIME record. Resolves `true` on success. Stable across renders. |
-| `error`       | `Error \| null`                             | Last failure, as thrown by the browser (e.g. `NotAllowedError`).                     |
-| `isSupported` | `boolean`                                   | `false` on the server and in browsers without the Clipboard API.                     |
+| Returns       | Type                                        | Description                                                                                                  |
+| ------------- | ------------------------------------------- | ------------------------------------------------------------------------------------------------------------ |
+| `copiedValue` | `string \| null`                            | Last copied text, or the `text/plain` entry of a record. `null` before a copy, after a failure or a timeout. |
+| `copy`        | `(data: ClipboardData) => Promise<boolean>` | Writes a string or a MIME record. Resolves `true` on success. Stable across renders.                         |
+| `error`       | `Error \| null`                             | Last failure, as thrown by the browser (e.g. `NotAllowedError`).                                             |
+| `isSupported` | `boolean`                                   | `false` on the server and in browsers without the Clipboard API.                                             |
 
 ### `<ClipboardProvider>`
 
@@ -77,14 +77,22 @@ import { ClipboardProvider } from 'use-clipboard-api';
 </ClipboardProvider>;
 ```
 
-| Attribute                 | Description                                                                |
-| ------------------------- | -------------------------------------------------------------------------- |
-| `data-copy`               | Copies the attribute value.                                                |
-| `data-copy-target`        | Copies the `value` of an input or textarea, or the text of other elements. |
-| `data-copy-format="html"` | With `data-copy-target`, copies the target as rich text.                   |
-| `data-copied`             | Set on the clicked element after a copy. Removed on timeout or next copy.  |
+| Attribute                 | Description                                                                            |
+| ------------------------- | -------------------------------------------------------------------------------------- |
+| `data-copy`               | Copies the attribute value.                                                            |
+| `data-copy-target`        | Copies the `value` of an input or textarea, or the text of other elements.             |
+| `data-copy-format="html"` | With `data-copy-target`, copies the target as rich text.                               |
+| `data-copied`             | Set on the clicked element after a copy. Removed on timeout, failure or the next copy. |
 
 `useClipboardContext()` returns the provider's `useClipboardApi` result. See the [provider guide](docs/provider.md).
+
+### Types
+
+All types are exported: `ClipboardData`, `ClipboardEntry`, `ClipboardProviderProps`, `CopiedValue`, `CopyFn`, `UseClipboardApiOptions` and `UseClipboardApiResult`.
+
+```ts
+import type { ClipboardData } from 'use-clipboard-api';
+```
 
 ## Requirements
 
@@ -94,6 +102,8 @@ Browsers only allow clipboard writes when both are true:
 - The document has focus. Call `copy` from a user action, like a click.
 
 Otherwise `copy` resolves `false` and `error.name` is `NotAllowedError`.
+
+`ClipboardProvider` works in React Server Components layouts, like the Next.js App Router. The bundle starts with `'use client'`.
 
 ## Examples
 

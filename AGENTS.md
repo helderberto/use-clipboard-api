@@ -14,7 +14,8 @@ React hook and provider for copying with the Clipboard API: `useClipboardApi`, `
 ## Code
 
 - TDD: failing test first, even for bug fixes
-- Vitest + `@testing-library/react` `renderHook`, jsdom environment
+- Vitest + `@testing-library/react`, jsdom environment. `renderHook` for hooks, `render` + `userEvent` for components
+- `build.test.ts` runs tsup in the node environment (`// @vitest-environment node`)
 - Stub browser globals with `vi.stubGlobal`. Restore with `vi.unstubAllGlobals()` in `afterEach`
 - Coverage stays at 100%. Vitest thresholds enforce it
 - Minimum code. No speculative options or abstractions
