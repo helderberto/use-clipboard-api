@@ -1,5 +1,12 @@
 # Changelog
 
+## [2.0.2](https://github.com/helderberto/use-clipboard-api/compare/v2.0.1...v2.0.2) (2026-10-19)
+
+### Documentation
+
+* drop the 0.x migration section ([f35e3cf](https://github.com/helderberto/use-clipboard-api/commit/f35e3cfb4252d050bf4976c0b44ba04d08356c3c))
+* remove the 0.x migration guide ([6df6f4b](https://github.com/helderberto/use-clipboard-api/commit/6df6f4b64d4b0b663137117ab88940fa94fc24ac))
+
 ## [2.0.1](https://github.com/helderberto/use-clipboard-api/compare/v2.0.0...v2.0.1) (2026-10-19)
 
 ### Documentation
