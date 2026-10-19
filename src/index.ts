@@ -1,4 +1,4 @@
-export { default, useClipboardApi } from './useClipboardApi';
+export { useClipboardApi } from './useClipboardApi';
 export { ClipboardProvider, useClipboardContext } from './ClipboardProvider';
 export { Copy } from './Copy';
 export type {

@@ -121,5 +121,3 @@ export function useClipboardApi({
 
   return { copiedValue, copy, copyFrom, error, getCopyProps, isSupported };
 }
-
-export default useClipboardApi;

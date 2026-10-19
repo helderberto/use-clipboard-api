@@ -1,7 +1,7 @@
 import { act, renderHook } from '@testing-library/react';
 import { createElement, StrictMode } from 'react';
 import { renderToString } from 'react-dom/server';
-import useClipboardApiDefault, { useClipboardApi } from '..';
+import { useClipboardApi } from '..';
 
 const writeText = vi.fn<(text: string) => Promise<void>>();
 const write = vi.fn<(items: ClipboardItem[]) => Promise<void>>();
@@ -32,10 +32,6 @@ afterEach(() => {
 });
 
 describe('useClipboardApi', () => {
-  it('exports the hook as default and named export', () => {
-    expect(useClipboardApiDefault).toBe(useClipboardApi);
-  });
-
   it('returns the initial state', () => {
     const { result } = renderHook(() => useClipboardApi());
 

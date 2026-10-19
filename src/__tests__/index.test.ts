@@ -20,7 +20,6 @@ describe('public API', () => {
     expect(Object.keys(api).sort()).toEqual([
       'ClipboardProvider',
       'Copy',
-      'default',
       'useClipboardApi',
       'useClipboardContext',
     ]);
