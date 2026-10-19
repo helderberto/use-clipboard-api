@@ -56,12 +56,21 @@ The hook is also the default export.
 | --------- | -------- | ----------------------------------------------------------------------------- |
 | `timeout` | `number` | Milliseconds until `copiedValue` resets to `null`. Omit it to keep the value. |
 
-| Returns       | Type                                        | Description                                                                                                  |
-| ------------- | ------------------------------------------- | ------------------------------------------------------------------------------------------------------------ |
-| `copiedValue` | `string \| null`                            | Last copied text, or the `text/plain` entry of a record. `null` before a copy, after a failure or a timeout. |
-| `copy`        | `(data: ClipboardData) => Promise<boolean>` | Writes a string or a MIME record. Resolves `true` on success. Stable across renders.                         |
-| `error`       | `Error \| null`                             | Last failure, as thrown by the browser (e.g. `NotAllowedError`).                                             |
-| `isSupported` | `boolean`                                   | `false` on the server and in browsers without the Clipboard API.                                             |
+| Returns        | Type                                        | Description                                                                                                  |
+| -------------- | ------------------------------------------- | ------------------------------------------------------------------------------------------------------------ |
+| `copiedValue`  | `string \| null`                            | Last copied text, or the `text/plain` entry of a record. `null` before a copy, after a failure or a timeout. |
+| `copy`         | `(data: ClipboardData) => Promise<boolean>` | Writes a string or a MIME record. Resolves `true` on success. Stable across renders.                         |
+| `error`        | `Error \| null`                             | Last failure, as thrown by the browser (e.g. `NotAllowedError`).                                             |
+| `getCopyProps` | `(data: ClipboardData) => CopyProps`        | Props for a copy button: `type`, `onClick` and `data-copied` while `data` is the copied value.               |
+| `isSupported`  | `boolean`                                   | `false` on the server and in browsers without the Clipboard API.                                             |
+
+Spread `getCopyProps` on a button to skip the wiring. Style the copied state with `[data-copied]`.
+
+```tsx
+const { getCopyProps } = useClipboardApi({ timeout: 2000 });
+
+<button {...getCopyProps('npm i use-clipboard-api')}>Copy</button>;
+```
 
 ### `<ClipboardProvider>`
 
@@ -88,7 +97,7 @@ import { ClipboardProvider } from 'use-clipboard-api';
 
 ### Types
 
-All types are exported: `ClipboardData`, `ClipboardEntry`, `ClipboardProviderProps`, `CopiedValue`, `CopyFn`, `UseClipboardApiOptions` and `UseClipboardApiResult`.
+All types are exported: `ClipboardData`, `ClipboardEntry`, `ClipboardProviderProps`, `CopiedValue`, `CopyFn`, `CopyProps`, `GetCopyProps`, `UseClipboardApiOptions` and `UseClipboardApiResult`.
 
 ```ts
 import type { ClipboardData } from 'use-clipboard-api';
