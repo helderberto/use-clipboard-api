@@ -63,6 +63,29 @@ The hook is also the default export.
 | `error`       | `Error \| null`                             | Last failure, as thrown by the browser (e.g. `NotAllowedError`).                     |
 | `isSupported` | `boolean`                                   | `false` on the server and in browsers without the Clipboard API.                     |
 
+### `<ClipboardProvider>`
+
+Copies from markup with `data-*` attributes, no handlers needed. It works with HTML React does not render, like markdown or CMS content.
+
+```tsx
+import { ClipboardProvider } from 'use-clipboard-api';
+
+<ClipboardProvider timeout={2000}>
+  <button data-copy="npm i use-clipboard-api">Copy</button>
+  <pre id="snippet">npm run build</pre>
+  <button data-copy-target="#snippet">Copy snippet</button>
+</ClipboardProvider>;
+```
+
+| Attribute                 | Description                                                                |
+| ------------------------- | -------------------------------------------------------------------------- |
+| `data-copy`               | Copies the attribute value.                                                |
+| `data-copy-target`        | Copies the `value` of an input or textarea, or the text of other elements. |
+| `data-copy-format="html"` | With `data-copy-target`, copies the target as rich text.                   |
+| `data-copied`             | Set on the clicked element after a copy. Removed on timeout or next copy.  |
+
+`useClipboardContext()` returns the provider's `useClipboardApi` result. See the [provider guide](docs/provider.md).
+
 ## Requirements
 
 Browsers only allow clipboard writes when both are true:
