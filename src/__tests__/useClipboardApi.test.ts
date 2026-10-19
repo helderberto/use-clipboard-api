@@ -1,88 +1,272 @@
-import { waitFor, act, renderHook } from '@testing-library/react';
-import { vi } from 'vitest';
-import useClipboardApi from '../useClipboardApi';
+import { act, renderHook } from '@testing-library/react';
+import { createElement, StrictMode } from 'react';
+import { renderToString } from 'react-dom/server';
+import useClipboardApiDefault, { useClipboardApi } from '..';
 
-// Mock implementation for the clipboard API
-const mockWriteText = vi.fn();
+const writeText = vi.fn<(text: string) => Promise<void>>();
 
-Object.assign(window.navigator, {
-  clipboard: {
-    writeText: mockWriteText,
-  },
+function deferred() {
+  let resolve!: () => void;
+  let reject!: (reason: unknown) => void;
+  const promise = new Promise<void>((res, rej) => {
+    resolve = res;
+    reject = rej;
+  });
+  return { promise, resolve, reject };
+}
+
+beforeEach(() => {
+  writeText.mockReset().mockResolvedValue(undefined);
+  vi.stubGlobal('navigator', { clipboard: { writeText } });
+});
+
+afterEach(() => {
+  vi.useRealTimers();
+  vi.unstubAllGlobals();
 });
 
 describe('useClipboardApi', () => {
-  beforeEach(() => {
-    vi.clearAllMocks();
+  it('exports the hook as default and named export', () => {
+    expect(useClipboardApiDefault).toBe(useClipboardApi);
   });
 
-  it('should return initial state and copy function', () => {
+  it('returns the initial state', () => {
     const { result } = renderHook(() => useClipboardApi());
-    const [value, copy, error] = result.current;
 
-    expect(value).toBe(null);
-    expect(typeof copy).toBe('function');
-    expect(error).toBe(null);
+    expect(result.current).toEqual({
+      copiedValue: null,
+      copy: expect.any(Function),
+      error: null,
+      isSupported: true,
+    });
   });
 
-  it('should copy text successfully', async () => {
+  it('copies text and stores the copied value', async () => {
     const { result } = renderHook(() => useClipboardApi());
-    const [, copy] = result.current;
 
-    mockWriteText.mockImplementationOnce(() => Promise.resolve());
+    let success: boolean | undefined;
+    await act(async () => {
+      success = await result.current.copy('Hello');
+    });
+
+    expect(success).toBe(true);
+    expect(writeText).toHaveBeenCalledWith('Hello');
+    expect(result.current.copiedValue).toBe('Hello');
+    expect(result.current.error).toBeNull();
+  });
+
+  it('keeps the original error when copying fails', async () => {
+    const notAllowed = new DOMException(
+      'Document is not focused.',
+      'NotAllowedError',
+    );
+    writeText.mockRejectedValueOnce(notAllowed);
+    const { result } = renderHook(() => useClipboardApi());
+
+    let success: boolean | undefined;
+    await act(async () => {
+      success = await result.current.copy('Hello');
+    });
+
+    expect(success).toBe(false);
+    expect(result.current.copiedValue).toBeNull();
+    expect(result.current.error).toBe(notAllowed);
+    expect(result.current.error?.name).toBe('NotAllowedError');
+  });
+
+  it('wraps non-Error rejections in an Error', async () => {
+    writeText.mockRejectedValueOnce('denied');
+    const { result } = renderHook(() => useClipboardApi());
 
     await act(async () => {
-      const success = await copy('Hello, world!');
-
-      expect(success).toBe(true);
+      await result.current.copy('Hello');
     });
 
-    await waitFor(() => {
-      const updatedResult = result.current;
-      expect(updatedResult[0]).toBe('Hello, world!');
-      expect(updatedResult[2]).toBe(null);
-    });
-
-    expect(mockWriteText).toHaveBeenCalledWith('Hello, world!');
+    expect(result.current.error).toEqual(new Error('denied'));
   });
 
-  it('should handle errors when copying fails', async () => {
+  it('clears the previous error after a successful copy', async () => {
+    writeText.mockRejectedValueOnce(new Error('Copy failed'));
     const { result } = renderHook(() => useClipboardApi());
-    const [, copy] = result.current;
 
-    mockWriteText.mockImplementationOnce(() => {
-      return Promise.reject(new Error('Copy failed'));
+    await act(async () => {
+      await result.current.copy('first');
+    });
+    await act(async () => {
+      await result.current.copy('second');
+    });
+
+    expect(result.current.error).toBeNull();
+    expect(result.current.copiedValue).toBe('second');
+  });
+
+  it('fails when the clipboard is not supported', async () => {
+    vi.stubGlobal('navigator', {});
+    const { result } = renderHook(() => useClipboardApi());
+
+    let success: boolean | undefined;
+    await act(async () => {
+      success = await result.current.copy('Hello');
+    });
+
+    expect(result.current.isSupported).toBe(false);
+    expect(success).toBe(false);
+    expect(writeText).not.toHaveBeenCalled();
+    expect(result.current.error).toEqual(new Error('Clipboard not supported.'));
+  });
+
+  it('does not throw when navigator is undefined', async () => {
+    vi.stubGlobal('navigator', undefined);
+    const { result } = renderHook(() => useClipboardApi());
+
+    await act(async () => {
+      await result.current.copy('Hello');
+    });
+
+    expect(result.current.isSupported).toBe(false);
+    expect(result.current.error).toEqual(new Error('Clipboard not supported.'));
+  });
+
+  it('reports isSupported as false during server rendering', () => {
+    function Probe() {
+      return String(useClipboardApi().isSupported);
+    }
+
+    expect(renderToString(createElement(Probe))).toBe('false');
+  });
+
+  it('updates state under Strict Mode', async () => {
+    const { result } = renderHook(() => useClipboardApi(), {
+      wrapper: StrictMode,
     });
 
     await act(async () => {
-      const success = await copy('This will fail');
-
-      expect(success).toBe(false);
+      await result.current.copy('Hello');
     });
 
-    await waitFor(() => {
-      const updatedResult = result.current;
-      expect(updatedResult[0]).toBe(null);
-      expect(updatedResult[2]).toBe('Copy failed');
-    });
+    expect(result.current.copiedValue).toBe('Hello');
   });
 
-  it('should throw error if clipboard is not supported', async () => {
-    delete window.navigator.clipboard;
+  it('keeps copy stable across renders', () => {
+    const { result, rerender } = renderHook(() => useClipboardApi());
+    const { copy } = result.current;
 
-    const { result } = renderHook(() => useClipboardApi());
-    const [, copy] = result.current;
+    rerender();
+
+    expect(result.current.copy).toBe(copy);
+  });
+
+  it('resets the copied value after the timeout', async () => {
+    vi.useFakeTimers();
+    const { result } = renderHook(() => useClipboardApi({ timeout: 1000 }));
 
     await act(async () => {
-      const success = await copy('Test');
+      await result.current.copy('Hello');
+    });
+    act(() => {
+      vi.advanceTimersByTime(999);
+    });
+    expect(result.current.copiedValue).toBe('Hello');
 
-      expect(success).toBe(false);
+    act(() => {
+      vi.advanceTimersByTime(1);
+    });
+    expect(result.current.copiedValue).toBeNull();
+  });
+
+  it('restarts the timeout on a new copy', async () => {
+    vi.useFakeTimers();
+    const { result } = renderHook(() => useClipboardApi({ timeout: 1000 }));
+
+    await act(async () => {
+      await result.current.copy('first');
+    });
+    act(() => {
+      vi.advanceTimersByTime(600);
+    });
+    await act(async () => {
+      await result.current.copy('second');
+    });
+    act(() => {
+      vi.advanceTimersByTime(600);
     });
 
-    await waitFor(() => {
-      const updatedResult = result.current;
-      expect(updatedResult[0]).toBe(null);
-      expect(updatedResult[2]).toBe('Clipboard not supported.');
+    expect(result.current.copiedValue).toBe('second');
+  });
+
+  it('keeps the copied value when no timeout is set', async () => {
+    vi.useFakeTimers();
+    const { result } = renderHook(() => useClipboardApi());
+
+    await act(async () => {
+      await result.current.copy('Hello');
     });
+    act(() => {
+      vi.advanceTimersByTime(60_000);
+    });
+
+    expect(result.current.copiedValue).toBe('Hello');
+  });
+
+  it('clears the pending timeout on unmount', async () => {
+    vi.useFakeTimers();
+    const { result, unmount } = renderHook(() =>
+      useClipboardApi({ timeout: 1000 }),
+    );
+
+    await act(async () => {
+      await result.current.copy('Hello');
+    });
+    unmount();
+
+    expect(vi.getTimerCount()).toBe(0);
+  });
+
+  it('does not update state when a copy resolves after unmount', async () => {
+    vi.useFakeTimers();
+    const pending = deferred();
+    writeText.mockReturnValueOnce(pending.promise);
+    const { result, unmount } = renderHook(() =>
+      useClipboardApi({ timeout: 1000 }),
+    );
+
+    const copied = result.current.copy('Hello');
+    unmount();
+    pending.resolve();
+
+    await expect(copied).resolves.toBe(true);
+    expect(result.current.copiedValue).toBeNull();
+    expect(vi.getTimerCount()).toBe(0);
+  });
+
+  it('ignores a stale success that resolves after a newer copy', async () => {
+    const slow = deferred();
+    writeText.mockReturnValueOnce(slow.promise);
+    const { result } = renderHook(() => useClipboardApi());
+
+    await act(async () => {
+      const first = result.current.copy('first');
+      await result.current.copy('second');
+      slow.resolve();
+      await first;
+    });
+
+    expect(result.current.copiedValue).toBe('second');
+  });
+
+  it('ignores a stale failure that rejects after a newer copy', async () => {
+    const slow = deferred();
+    writeText.mockReturnValueOnce(slow.promise);
+    const { result } = renderHook(() => useClipboardApi());
+
+    await act(async () => {
+      const first = result.current.copy('first');
+      await result.current.copy('second');
+      slow.reject(new Error('late failure'));
+      await first;
+    });
+
+    expect(result.current.error).toBeNull();
+    expect(result.current.copiedValue).toBe('second');
   });
 });

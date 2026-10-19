@@ -59,7 +59,7 @@
   },
   "homepage": "https://github.com/helderberto/use-clipboard-api#readme",
   "peerDependencies": {
-    "react": ">=16.8.0"
+    "react": ">=18.0.0"
   },
   "devDependencies": {
     "@arethetypeswrong/cli": "0.18.5",
