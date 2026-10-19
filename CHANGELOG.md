@@ -1,5 +1,15 @@
 # Changelog
 
+## [1.4.1](https://github.com/helderberto/use-clipboard-api/compare/v1.4.0...v1.4.1) (2026-10-19)
+
+### Documentation
+
+* note the conventionalcommits preset pin ([4852f95](https://github.com/helderberto/use-clipboard-api/commit/4852f95c0818163dbfea7c43f525eac267b19e35))
+
+### Build System
+
+* list docs, build, refactor and style in the changelog ([a3dea16](https://github.com/helderberto/use-clipboard-api/commit/a3dea16a2c1c83d821cd8162fd4d6d6782a14866))
+
 # [1.4.0](https://github.com/helderberto/use-clipboard-api/compare/v1.3.0...v1.4.0) (2026-10-19)
 
 
