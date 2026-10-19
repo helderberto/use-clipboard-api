@@ -3,17 +3,43 @@
   "version": "0.3.6",
   "description": "📋useClipboardApi is a React Hook that consumes Web Clipboard API.",
   "author": "Helder B. Berto <helder.burato@gmail.com>",
-  "main": "dist/index.js",
-  "types": "dist/types/index.d.ts",
+  "type": "commonjs",
+  "main": "./dist/index.js",
+  "module": "./dist/index.mjs",
+  "types": "./dist/index.d.ts",
+  "exports": {
+    ".": {
+      "import": {
+        "types": "./dist/index.d.mts",
+        "default": "./dist/index.mjs"
+      },
+      "require": {
+        "types": "./dist/index.d.ts",
+        "default": "./dist/index.js"
+      }
+    },
+    "./package.json": "./package.json"
+  },
+  "sideEffects": false,
+  "files": [
+    "dist",
+    "LICENSE",
+    "README.md",
+    "CHANGELOG.md"
+  ],
+  "engines": {
+    "node": ">=18"
+  },
   "scripts": {
     "lint": "eslint . --max-warnings=0",
     "format": "prettier --write \"**/*.+(js|ts|tsx|json)\"",
     "test": "vitest run",
     "test:ci": "vitest run --coverage",
     "test:watch": "vitest",
-    "build": "rm -rf ./dist && tsc",
+    "build": "tsup",
     "prepare": "husky",
-    "prepublishOnly": "npm run build"
+    "prepublishOnly": "npm run build",
+    "check:package": "publint && attw --pack ."
   },
   "keywords": [
     "react",
@@ -26,16 +52,17 @@
   "license": "MIT",
   "repository": {
     "type": "git",
-    "url": "https://github.com/helderberto/use-clipboard-api"
+    "url": "git+https://github.com/helderberto/use-clipboard-api.git"
   },
   "bugs": {
     "url": "https://github.com/helderberto/use-clipboard-api/issues"
   },
   "homepage": "https://github.com/helderberto/use-clipboard-api#readme",
   "peerDependencies": {
-    "react": ">=16.0.0"
+    "react": ">=16.8.0"
   },
   "devDependencies": {
+    "@arethetypeswrong/cli": "0.18.5",
     "@commitlint/cli": "21.2.4",
     "@commitlint/config-conventional": "21.2.4",
     "@eslint-react/eslint-plugin": "5.28.2",
@@ -58,10 +85,12 @@
     "jsdom": "29.1.1",
     "lint-staged": "16.4.0",
     "prettier": "3.9.10",
+    "publint": "0.3.25",
     "react": "19.3.1",
     "react-dom": "19.3.1",
     "ts-node": "10.9.2",
-    "typescript": "5.9.3",
+    "tsup": "9.0.0",
+    "typescript": "6.0.2",
     "typescript-eslint": "8.71.2",
     "vitest": "5.0.5"
   },
