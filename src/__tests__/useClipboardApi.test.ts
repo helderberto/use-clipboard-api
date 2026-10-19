@@ -43,6 +43,7 @@ describe('useClipboardApi', () => {
       copiedValue: null,
       copy: expect.any(Function),
       error: null,
+      getCopyProps: expect.any(Function),
       isSupported: true,
     });
   });
