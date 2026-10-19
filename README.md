@@ -1,7 +1,7 @@
 <div align="center">
-  <h1>📋 use-clipboard-api</h1>
+  <h1>use-clipboard-api</h1>
 
-  <p><strong>useClipboardApi() is a React Hook</strong> that consumes Web Clipboard API.</p>
+  <p><strong>React hook for copying text with the Clipboard API.</strong></p>
 
 <!-- prettier-ignore-start -->
 [![build][build-badge]][build]
@@ -14,59 +14,85 @@
 
 ---
 
-## Table of Contents
+## Why
 
-<!-- START doctoc generated TOC please keep comment here to allow auto update -->
-<!-- DON'T EDIT THIS SECTION, INSTEAD RE-RUN doctoc TO UPDATE -->
+`navigator.clipboard.writeText` is async and can fail. This hook tracks the copied text and the error for you.
 
-- [Motivation](#motivation)
-- [Usage](#usage)
-- [Contributing](#contributing)
-- [Bugs and Sugestions](#bugs-and-sugestions)
-- [License](#license)
+It also resets a "Copied!" label after a timeout, and it ignores results that arrive after unmount or after a newer copy.
 
-<!-- END doctoc generated TOC please keep comment here to allow auto update -->
+## Install
 
-## Motivation
+```bash
+npm install use-clipboard-api
+```
 
-- Easy way to use [Clipboard API](https://developer.mozilla.org/en-US/docs/Web/API/Clipboard_API) into your React project;
+Requires React 18 or later.
 
-## Usage
-
-To start using the `use-clipboard-api` in your project, first install in your project:
-
-`yarn add use-clipboard-api` or `npm install use-clipboard-api`
-
-<details open>
-<summary><strong>Copy to clipboard using a ref:</strong></summary>
+## Quick start
 
 ```tsx
-import React, { useRef } from 'react';
-import useClipboardApi from 'use-clipboard-api';
+import { useClipboardApi } from 'use-clipboard-api';
 
-function ClipboardExampleWithRef() {
-  const inputRef = useRef<HTMLInputElement | null>(null);
-  const [copiedValue, copy, error] = useClipboardApi();
+function CopyButton({ text }: { text: string }) {
+  const { copiedValue, copy, isSupported } = useClipboardApi({ timeout: 2000 });
 
-  const handleCopy = async () => {
-    if (inputRef.current) {
-      const valueToCopy = inputRef.current.value;
-      const success = await copy(valueToCopy);
+  if (!isSupported) return null;
 
-      if (success) {
-        console.log('Text copied:', copiedValue);
-      } else {
-        console.error('Copy failed:', error);
-      }
-    }
-  };
+  return (
+    <button onClick={() => copy(text)}>
+      {copiedValue ? 'Copied!' : 'Copy'}
+    </button>
+  );
+}
+```
+
+## API
+
+### `useClipboardApi(options?)`
+
+The hook is also the default export.
+
+| Option    | Type     | Description                                                                   |
+| --------- | -------- | ----------------------------------------------------------------------------- |
+| `timeout` | `number` | Milliseconds until `copiedValue` resets to `null`. Omit it to keep the value. |
+
+| Returns       | Type                                 | Description                                                           |
+| ------------- | ------------------------------------ | --------------------------------------------------------------------- |
+| `copiedValue` | `string \| null`                     | Last copied text. `null` before a copy, after a failure or a timeout. |
+| `copy`        | `(text: string) => Promise<boolean>` | Writes `text`. Resolves `true` on success. Stable across renders.     |
+| `error`       | `Error \| null`                      | Last failure, as thrown by the browser (e.g. `NotAllowedError`).      |
+| `isSupported` | `boolean`                            | `false` on the server and in browsers without the Clipboard API.      |
+
+## Requirements
+
+Browsers only allow clipboard writes when both are true:
+
+- The page runs in a secure context: HTTPS or `localhost`.
+- The document has focus. Call `copy` from a user action, like a click.
+
+Otherwise `copy` resolves `false` and `error.name` is `NotAllowedError`.
+
+## Examples
+
+`copiedValue` and `error` update on the next render. Use the boolean that `copy` resolves to when you need the result right away.
+
+<details>
+<summary>Copy from an input with a ref</summary>
+
+```tsx
+import { useRef } from 'react';
+import { useClipboardApi } from 'use-clipboard-api';
+
+function CopyInput() {
+  const inputRef = useRef<HTMLInputElement>(null);
+  const { copiedValue, copy, error } = useClipboardApi({ timeout: 2000 });
 
   return (
     <div>
-      <input ref={inputRef} type="text" placeholder="Type something to copy" />
-      <button onClick={handleCopy}>Copy to Clipboard</button>
+      <input ref={inputRef} placeholder="Type something to copy" />
+      <button onClick={() => copy(inputRef.current?.value ?? '')}>Copy</button>
       {copiedValue && <p>Copied: {copiedValue}</p>}
-      {error && <p style={{ color: 'red' }}>Error: {error}</p>}
+      {error && <p role="alert">{error.message}</p>}
     </div>
   );
 }
@@ -75,37 +101,22 @@ function ClipboardExampleWithRef() {
 </details>
 
 <details>
-<summary><strong>Copy to clipboard without using a ref:</strong></summary>
+<summary>Copy from controlled state</summary>
 
 ```tsx
-import React, { useState } from 'react';
-import useClipboardApi from 'use-clipboard-api';
+import { useState } from 'react';
+import { useClipboardApi } from 'use-clipboard-api';
 
-function ClipboardExampleWithoutRef() {
-  const [inputValue, setInputValue] = useState('');
-  const [copiedValue, copy, error] = useClipboardApi();
-
-  const handleCopy = async () => {
-    const success = await copy(inputValue);
-
-    if (success) {
-      console.log('Text copied:', copiedValue);
-    } else {
-      console.error('Copy failed:', error);
-    }
-  };
+function CopyField() {
+  const [value, setValue] = useState('');
+  const { copiedValue, copy } = useClipboardApi({ timeout: 2000 });
 
   return (
     <div>
-      <input
-        type="text"
-        value={inputValue}
-        onChange={(e) => setInputValue(e.target.value)}
-        placeholder="Type something to copy"
-      />
-      <button onClick={handleCopy}>Copy to Clipboard</button>
-      {copiedValue && <p>Copied: {copiedValue}</p>}
-      {error && <p style={{ color: 'red' }}>Error: {error}</p>}
+      <input value={value} onChange={(e) => setValue(e.target.value)} />
+      <button onClick={() => copy(value)}>
+        {copiedValue ? 'Copied!' : 'Copy'}
+      </button>
     </div>
   );
 }
@@ -113,17 +124,50 @@ function ClipboardExampleWithoutRef() {
 
 </details>
 
+<details>
+<summary>Handle failures</summary>
+
+```tsx
+import { useClipboardApi } from 'use-clipboard-api';
+
+function ShareLink({ url }: { url: string }) {
+  const { copy, error } = useClipboardApi();
+
+  const handleClick = async () => {
+    const copied = await copy(url);
+    if (!copied) {
+      window.prompt('Copy this link:', url);
+    }
+  };
+
+  return (
+    <>
+      <button onClick={handleClick}>Copy link</button>
+      {error?.name === 'NotAllowedError' && (
+        <p>Allow clipboard access and try again.</p>
+      )}
+    </>
+  );
+}
+```
+
+</details>
+
+## Migrating from 0.x
+
+Version 1 returns an object instead of a tuple. See the [migration guide](docs/migration.md).
+
 ## Contributing
 
-Please read [CONTRIBUTING.md](CONTRIBUTING.md) for details on our code of conduct, and the process for submitting pull requests to us.
+Read [CONTRIBUTING.md](CONTRIBUTING.md) for setup, scripts and the commit format.
 
-## Bugs and Sugestions
+## Bugs and suggestions
 
-Report bugs or do suggestions using the [issues](https://github.com/helderberto/use-clipboard-api/issues).
+Open an [issue](https://github.com/helderberto/use-clipboard-api/issues).
 
 ## License
 
-[MIT License](LICENSE) © [helderburato](https://helderberto.com)
+[MIT License](LICENSE) © [helderberto](https://helderberto.com)
 
 <!-- prettier-ignore-start -->
 [version-badge]: https://img.shields.io/npm/v/use-clipboard-api.svg?style=flat-square
@@ -131,7 +175,7 @@ Report bugs or do suggestions using the [issues](https://github.com/helderberto/
 [downloads-badge]: https://img.shields.io/npm/dm/use-clipboard-api.svg?style=flat-square
 [npmtrends]: http://www.npmtrends.com/use-clipboard-api
 [license-badge]: https://img.shields.io/npm/l/use-clipboard-api.svg?style=flat-square
-[license]: https://github.com/helderberto/use-clipboard-api/blob/master/LICENSE
+[license]: https://github.com/helderberto/use-clipboard-api/blob/main/LICENSE
 [build]: https://github.com/helderberto/use-clipboard-api/actions
 [build-badge]: https://github.com/helderberto/use-clipboard-api/actions/workflows/ci.yml/badge.svg
 <!-- prettier-ignore-end -->
