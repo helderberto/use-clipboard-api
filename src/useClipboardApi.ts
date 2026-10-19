@@ -9,10 +9,12 @@ import type {
   ClipboardData,
   CopiedValue,
   CopyFn,
+  CopyFromFn,
   GetCopyProps,
   UseClipboardApiOptions,
   UseClipboardApiResult,
 } from './types';
+import { readElement } from './readElement';
 
 const isClipboardSupported = () =>
   typeof navigator !== 'undefined' && !!navigator.clipboard;
@@ -53,8 +55,8 @@ export function useClipboardApi({
     };
   }, []);
 
-  const copy: CopyFn = useCallback(
-    async (data) => {
+  const write = useCallback(
+    async (read: () => ClipboardData) => {
       const copyId = ++latestCopyRef.current;
       const isLatest = () =>
         isMountedRef.current && copyId === latestCopyRef.current;
@@ -64,6 +66,7 @@ export function useClipboardApi({
         if (!isClipboardSupported()) {
           throw new Error('Clipboard not supported.');
         }
+        const data = read();
         const text = toPlainText(data);
         if (typeof data !== 'string' && typeof ClipboardItem !== 'undefined') {
           await navigator.clipboard.write([new ClipboardItem(data)]);
@@ -91,6 +94,17 @@ export function useClipboardApi({
     [timeout],
   );
 
+  const copy: CopyFn = useCallback((data) => write(() => data), [write]);
+
+  const copyFrom: CopyFromFn = useCallback(
+    (ref, { format } = {}) =>
+      write(() => {
+        if (!ref.current) throw new Error('Copy target not found.');
+        return readElement(ref.current, format === 'html');
+      }),
+    [write],
+  );
+
   const getCopyProps: GetCopyProps = useCallback(
     (data) => {
       const text = toPlainText(data);
@@ -105,7 +119,7 @@ export function useClipboardApi({
     [copy, copiedValue],
   );
 
-  return { copiedValue, copy, error, getCopyProps, isSupported };
+  return { copiedValue, copy, copyFrom, error, getCopyProps, isSupported };
 }
 
 export default useClipboardApi;

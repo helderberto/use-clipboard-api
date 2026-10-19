@@ -42,6 +42,7 @@ describe('useClipboardApi', () => {
     expect(result.current).toEqual({
       copiedValue: null,
       copy: expect.any(Function),
+      copyFrom: expect.any(Function),
       error: null,
       getCopyProps: expect.any(Function),
       isSupported: true,
@@ -358,6 +359,90 @@ describe('useClipboardApi', () => {
       expect(result.current.error).toEqual(
         new Error('Rich clipboard not supported.'),
       );
+    });
+  });
+
+  describe('copyFrom', () => {
+    function element(html: string) {
+      const template = document.createElement('template');
+      template.innerHTML = html;
+      return template.content.firstElementChild;
+    }
+
+    it('copies the value of an input', async () => {
+      const ref = { current: element('<input value="from input">') };
+      const { result } = renderHook(() => useClipboardApi());
+
+      let success: boolean | undefined;
+      await act(async () => {
+        success = await result.current.copyFrom(ref);
+      });
+
+      expect(success).toBe(true);
+      expect(writeText).toHaveBeenCalledWith('from input');
+      expect(result.current.copiedValue).toBe('from input');
+    });
+
+    it('copies the value of a textarea', async () => {
+      const ref = { current: element('<textarea>from textarea</textarea>') };
+      const { result } = renderHook(() => useClipboardApi());
+
+      await act(async () => {
+        await result.current.copyFrom(ref);
+      });
+
+      expect(writeText).toHaveBeenCalledWith('from textarea');
+    });
+
+    it('copies the text content of other elements', async () => {
+      const ref = { current: element('<pre><b>npm</b> i</pre>') };
+      const { result } = renderHook(() => useClipboardApi());
+
+      await act(async () => {
+        await result.current.copyFrom(ref);
+      });
+
+      expect(writeText).toHaveBeenCalledWith('npm i');
+    });
+
+    it('copies HTML and text with format html', async () => {
+      vi.stubGlobal('ClipboardItem', FakeClipboardItem);
+      const ref = { current: element('<article><b>hi</b> there</article>') };
+      const { result } = renderHook(() => useClipboardApi());
+
+      await act(async () => {
+        await result.current.copyFrom(ref, { format: 'html' });
+      });
+
+      expect(write).toHaveBeenCalledWith([
+        new FakeClipboardItem({
+          'text/html': '<b>hi</b> there',
+          'text/plain': 'hi there',
+        }),
+      ]);
+      expect(result.current.copiedValue).toBe('hi there');
+    });
+
+    it('fails when the ref is empty', async () => {
+      const { result } = renderHook(() => useClipboardApi());
+
+      let success: boolean | undefined;
+      await act(async () => {
+        success = await result.current.copyFrom({ current: null });
+      });
+
+      expect(success).toBe(false);
+      expect(writeText).not.toHaveBeenCalled();
+      expect(result.current.error).toEqual(new Error('Copy target not found.'));
+    });
+
+    it('keeps copyFrom stable across renders', () => {
+      const { result, rerender } = renderHook(() => useClipboardApi());
+      const { copyFrom } = result.current;
+
+      rerender();
+
+      expect(result.current.copyFrom).toBe(copyFrom);
     });
   });
 });
