@@ -50,6 +50,9 @@ jobs:
       - name: Run lint
         run: npm run lint
 
+      - name: Run typecheck
+        run: npm run typecheck
+
   build:
     name: Build
     runs-on: ubuntu-latest
