@@ -7,7 +7,11 @@ export default defineConfig({
     coverage: {
       provider: 'v8',
       reporter: ['text', 'json', 'html'],
-      exclude: ['node_modules/', 'dist/'],
+      include: ['src/**/*.ts'],
+      exclude: ['src/__tests__/**'],
+      thresholds: {
+        100: true,
+      },
     },
   },
 });

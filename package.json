@@ -37,6 +37,7 @@
     "test:ci": "vitest run --coverage",
     "test:watch": "vitest",
     "build": "tsup",
+    "typecheck": "tsc",
     "prepare": "husky",
     "prepublishOnly": "npm run build",
     "check:package": "publint && attw --pack ."
