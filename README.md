@@ -16,7 +16,7 @@
 
 ## Why
 
-`navigator.clipboard.writeText` is async and can fail. This hook tracks the copied text and the error for you.
+`navigator.clipboard` is async and can fail. This hook tracks the copied text and the error for you, for plain text and rich content like markdown rendered as HTML.
 
 It also resets a "Copied!" label after a timeout, and it ignores results that arrive after unmount or after a newer copy.
 
@@ -56,12 +56,12 @@ The hook is also the default export.
 | --------- | -------- | ----------------------------------------------------------------------------- |
 | `timeout` | `number` | Milliseconds until `copiedValue` resets to `null`. Omit it to keep the value. |
 
-| Returns       | Type                                 | Description                                                           |
-| ------------- | ------------------------------------ | --------------------------------------------------------------------- |
-| `copiedValue` | `string \| null`                     | Last copied text. `null` before a copy, after a failure or a timeout. |
-| `copy`        | `(text: string) => Promise<boolean>` | Writes `text`. Resolves `true` on success. Stable across renders.     |
-| `error`       | `Error \| null`                      | Last failure, as thrown by the browser (e.g. `NotAllowedError`).      |
-| `isSupported` | `boolean`                            | `false` on the server and in browsers without the Clipboard API.      |
+| Returns       | Type                                        | Description                                                                          |
+| ------------- | ------------------------------------------- | ------------------------------------------------------------------------------------ |
+| `copiedValue` | `string \| null`                            | Last copied text. `null` before a copy, after a failure or a timeout.                |
+| `copy`        | `(data: ClipboardData) => Promise<boolean>` | Writes a string or a MIME record. Resolves `true` on success. Stable across renders. |
+| `error`       | `Error \| null`                             | Last failure, as thrown by the browser (e.g. `NotAllowedError`).                     |
+| `isSupported` | `boolean`                                   | `false` on the server and in browsers without the Clipboard API.                     |
 
 ## Requirements
 
@@ -150,6 +150,34 @@ function ShareLink({ url }: { url: string }) {
   );
 }
 ```
+
+</details>
+
+<details>
+<summary>Copy markdown as rich text</summary>
+
+Pass a MIME record. Pasting into Google Docs or Gmail keeps the formatting. Plain editors get the markdown. Bring your own converter, like [marked](https://github.com/markedjs/marked).
+
+```tsx
+import { marked } from 'marked';
+import { useClipboardApi } from 'use-clipboard-api';
+
+function CopyMarkdown({ markdown }: { markdown: string }) {
+  const { copy } = useClipboardApi();
+
+  return (
+    <button
+      onClick={() =>
+        copy({ 'text/html': marked.parse(markdown), 'text/plain': markdown })
+      }
+    >
+      Copy
+    </button>
+  );
+}
+```
+
+See [rich copy](docs/rich-copy.md) for Safari and browser fallbacks.
 
 </details>
 
