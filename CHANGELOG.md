@@ -1,5 +1,12 @@
 # Changelog
 
+# [1.2.0](https://github.com/helderberto/use-clipboard-api/compare/v1.1.0...v1.2.0) (2026-10-19)
+
+
+### Features
+
+* add ClipboardProvider with data-copy attributes ([dbd1904](https://github.com/helderberto/use-clipboard-api/commit/dbd19040b51c9c90d502a6373939168ea246631f)), closes [#849](https://github.com/helderberto/use-clipboard-api/issues/849)
+
 # [1.1.0](https://github.com/helderberto/use-clipboard-api/compare/v1.0.0...v1.1.0) (2026-10-19)
 
 
