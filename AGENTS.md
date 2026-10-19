@@ -41,7 +41,9 @@ Packaging changes: also run `npm run check:package` (publint + attw)
 ## Git
 
 - Atomic Conventional Commits. commitlint enforces them. Footer lines stay under 100 characters
-- Release by hand: bump `version` in `package.json` and add a `CHANGELOG.md` entry ([Keep a Changelog](https://keepachangelog.com))
+- semantic-release publishes from `main` and owns `version`. Never bump it by hand
+- `docs`, `refactor`, `perf`, `style`, `build` cut a patch release. `chore`, `ci`, `test` don't
+- Run `git pull --rebase origin main` before pushing
 
 ## Docs
 

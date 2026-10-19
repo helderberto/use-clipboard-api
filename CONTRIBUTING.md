@@ -38,3 +38,7 @@ You can delete your branch after the pull request is merged.
 
 - **pre-commit** runs ESLint and Prettier on staged files.
 - **commit-msg** checks the message format with commitlint.
+
+## Releases
+
+[semantic-release](https://github.com/semantic-release/semantic-release) publishes from `main`. It picks the version from commit types, so don't bump `version` by hand.
