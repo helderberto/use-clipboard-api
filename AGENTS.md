@@ -49,6 +49,7 @@ Packaging changes: also run `npm run check:package` (publint + attw)
 - semantic-release publishes from `main` and owns `version` and `CHANGELOG.md`. Never edit them by hand
 - npm publishes through trusted publishing (GitHub OIDC). No `NPM_TOKEN` secret
 - `docs`, `refactor`, `perf`, `style`, `build` cut a patch release. `chore`, `ci`, `test` don't
+- Breaking changes: `feat!:` subject only. No `BREAKING CHANGE:` footer, trailers after it leak into release notes
 - Run `git pull --rebase origin main` before pushing
 
 ## Docs
