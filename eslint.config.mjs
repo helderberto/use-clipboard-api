@@ -1,46 +1,39 @@
 import js from '@eslint/js';
 import tseslint from 'typescript-eslint';
-import react from 'eslint-plugin-react';
+import eslintReact from '@eslint-react/eslint-plugin';
 import reactHooks from 'eslint-plugin-react-hooks';
+import vitest from '@vitest/eslint-plugin';
 import prettier from 'eslint-config-prettier';
 import globals from 'globals';
+import { defineConfig } from 'eslint/config';
 
-export default [
+export default defineConfig([
   {
     ignores: ['dist/**', 'node_modules/**', 'coverage/**'],
   },
   js.configs.recommended,
-  ...tseslint.configs.recommended,
+  tseslint.configs.recommended,
   {
-    files: ['**/*.{js,jsx,ts,tsx}'],
     languageOptions: {
-      ecmaVersion: 'latest',
-      sourceType: 'module',
-      parser: tseslint.parser,
-      parserOptions: {
-        ecmaFeatures: {
-          jsx: true,
-        },
-      },
       globals: {
         ...globals.browser,
         ...globals.es2021,
       },
     },
-    plugins: {
-      react,
-      'react-hooks': reactHooks,
-      '@typescript-eslint': tseslint.plugin,
-    },
-    rules: {
-      ...react.configs.recommended.rules,
-      ...reactHooks.configs.recommended.rules,
-    },
-    settings: {
-      react: {
-        version: 'detect',
-      },
+  },
+  {
+    files: ['src/**/*.{ts,tsx}'],
+    extends: [
+      eslintReact.configs['recommended-typescript'],
+      reactHooks.configs.flat.recommended,
+    ],
+  },
+  {
+    files: ['src/**/__tests__/**/*.{ts,tsx}'],
+    extends: [vitest.configs.recommended],
+    languageOptions: {
+      globals: vitest.environments.env.globals,
     },
   },
   prettier,
-];
+]);
