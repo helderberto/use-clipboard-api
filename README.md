@@ -61,8 +61,6 @@ function CopyButton({ text }: { text: string }) {
 
 ### `useClipboardApi(options?)`
 
-The hook is also the default export.
-
 | Option    | Type     | Description                                                                   |
 | --------- | -------- | ----------------------------------------------------------------------------- |
 | `timeout` | `number` | Milliseconds until `copiedValue` resets to `null`. Omit it to keep the value. |
@@ -282,6 +280,17 @@ function CopyMarkdown({ markdown }: { markdown: string }) {
 See [rich copy](docs/rich-copy.md) for Safari and browser fallbacks.
 
 </details>
+
+## Migrating from v1 to v2
+
+Version 2 drops the default export. Import the hook by name.
+
+```diff
+- import useClipboardApi from 'use-clipboard-api';
++ import { useClipboardApi } from 'use-clipboard-api';
+```
+
+Nothing else changed.
 
 ## Migrating from 0.x
 

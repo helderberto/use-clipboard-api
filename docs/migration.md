@@ -11,7 +11,7 @@ The hook returns named fields instead of a tuple.
 + const { copiedValue, copy, error } = useClipboardApi();
 ```
 
-The default import still works. A named import is also available.
+Use the named import. Version 1 still accepts the default import, but version 2 removes it.
 
 ```diff
 - import useClipboardApi from 'use-clipboard-api';
