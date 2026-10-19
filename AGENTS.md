@@ -1,11 +1,14 @@
 # AGENTS.md
 
-React hook for copying text with the Clipboard API: `useClipboardApi`.
+React hook and provider for copying with the Clipboard API: `useClipboardApi`, `ClipboardProvider`.
 
 ## Layout
 
-- Source: `src/*.ts`. Public API only through `src/index.ts`
-- Tests: `src/__tests__/<name>.test.ts`
+- Source: `src/*.{ts,tsx}`. Public API only through `src/index.ts`
+- Types: `src/types/<name>.ts`, re-exported from `src/types/index.ts`
+- Tests: `src/__tests__/<name>.test.{ts,tsx}`
+- React 18 is the floor. No React 19 only APIs (`use`, `<Context value>`)
+- `userEvent.setup()` replaces `navigator.clipboard`. Call it before stubbing
 - Build: tsup to `dist/` (ESM `.mjs`, CJS `.js`, `.d.mts` + `.d.ts`)
 
 ## Code
