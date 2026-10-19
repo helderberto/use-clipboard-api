@@ -292,10 +292,6 @@ Version 2 drops the default export. Import the hook by name.
 
 Nothing else changed.
 
-## Migrating from 0.x
-
-Version 1 returns an object instead of a tuple. See the [migration guide](docs/migration.md).
-
 ## Contributing
 
 Read [CONTRIBUTING.md](CONTRIBUTING.md) for setup, scripts and the commit format.
