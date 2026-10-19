@@ -1,5 +1,12 @@
 # Changelog
 
+# [1.4.0](https://github.com/helderberto/use-clipboard-api/compare/v1.3.0...v1.4.0) (2026-10-19)
+
+
+### Features
+
+* add copyFrom to copy an element by ref ([0e08f83](https://github.com/helderberto/use-clipboard-api/commit/0e08f8335f5624f1492ce3b3a8f1e3884b40e57d)), closes [#859](https://github.com/helderberto/use-clipboard-api/issues/859)
+
 # [1.3.0](https://github.com/helderberto/use-clipboard-api/compare/v1.2.2...v1.3.0) (2026-10-19)
 
 
